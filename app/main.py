@@ -21,11 +21,22 @@ templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+
+    db = SessionLocal()
+
+    applications = (
+        db.query(Application)
+        .options(joinedload(Application.owner))
+        .all()
+    )
+
+    db.close()
+
     return templates.TemplateResponse(
         request=request,
         name="index.html",
         context={
-            "title": "PermissionFlow"
+            "applications": applications
         }
     )
 
@@ -117,7 +128,10 @@ def my_requests(request: Request):
 
     requests = (
     db.query(AccessRequest)
-    .options(joinedload(AccessRequest.application))
+    .options(
+        joinedload(AccessRequest.application)
+        .joinedload(Application.owner)
+    )
     .filter(AccessRequest.user_id == 2)
     .all()
 )
@@ -156,6 +170,50 @@ def owner_dashboard(request: Request):
             "requests": requests
         }
     )
+
+@app.post("/approve/{request_id}")
+def approve_request(
+    request_id: int,
+    comment: str = Form(...)
+):
+
+    db = SessionLocal()
+
+    access_request = (
+        db.query(AccessRequest)
+        .filter(AccessRequest.id == request_id)
+        .first()
+    )
+
+    access_request.status = "Approved"
+    access_request.owner_comment = comment
+
+    db.commit()
+    db.close()
+
+    return RedirectResponse("/owner", status_code=303)
+
+@app.post("/reject/{request_id}")
+def reject_request(
+    request_id: int,
+    comment: str = Form("")
+):
+
+    db = SessionLocal()
+
+    access_request = (
+        db.query(AccessRequest)
+        .filter(AccessRequest.id == request_id)
+        .first()
+    )
+
+    access_request.status = "Rejected"
+    access_request.owner_comment = comment
+
+    db.commit()
+    db.close()
+
+    return RedirectResponse("/owner", status_code=303)
 
     db.close()
 

@@ -1,33 +1,81 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Owner Dashboard</title>
-</head>
-
-<body>
+{% block content %}
 
 <h1>Owner Dashboard</h1>
 
+<table class="table table-bordered">
+
+<thead>
+
+<tr>
+
+<th>Employee</th>
+
+<th>Application</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
 {% for request in requests %}
 
-<hr>
+<tr>
 
-<h3>{{ request.application.name }}</h3>
+<td>{{ request.user.name }}</td>
 
-<p><b>Employee:</b> {{ request.user.name }}</p>
+<td>{{ request.application.name }}</td>
 
-<p><b>Access Profile:</b> {{ request.access_profile }}</p>
+<td>{{ request.status }}</td>
 
-<p><b>Justification:</b><br>
-{{ request.justification }}</p>
+<td>
 
-<p><b>Desired Date:</b> {{ request.desired_date }}</p>
+<form action="/approve/{{ request.id }}" method="post">
 
-<p><b>Status:</b> {{ request.status }}</p>
+<input
+class="form-control mb-2"
+name="comment"
+placeholder="Comment">
+
+<button class="btn btn-success btn-sm">
+
+Approve
+
+</button>
+
+</form>
+
+<br>
+
+<form action="/reject/{{ request.id }}" method="post">
+
+<input
+class="form-control mb-2"
+name="comment"
+placeholder="Comment">
+
+<button class="btn btn-danger btn-sm">
+
+Reject
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
 
 {% endfor %}
 
-</body>
+</tbody>
 
-</html>
+</table>
+
+{% endblock %}

@@ -1,34 +1,47 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>PermissionFlow</title>
-</head>
+{% block content %}
 
-<body>
+<h1>PermissionFlow</h1>
 
-    <h1>PermissionFlow</h1>
+<p class="lead">
+Internal Access Management System
+</p>
 
-    <p>Internal Access Management System</p>
+<hr>
 
-    <hr>
+<h3>Available Applications</h3>
 
-    <a href="/request">
-        <button>Request Access</button>
-    </a>
+<div class="row">
 
-    <br><br>
+{% for application in applications %}
 
-    <a href="/my_requests">
-        <button>My Requests</button>
-    </a>
+<div class="col-md-4 mb-3">
 
-    <br><br>
+<div class="card">
 
-    <a href="/owner">
-        <button>Owner Dashboard</button>
-    </a>
+<div class="card-body">
 
-</body>
+<h5>{{ application.name }}</h5>
 
-</html>
+<p>{{ application.description }}</p>
+
+<p>
+
+<b>Owner:</b>
+
+{{ application.owner.name }}
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}
