@@ -12,6 +12,7 @@ app = FastAPI(
     title="PermissionFlow",
     version="1.0.0"
 )
+
 templates = Jinja2Templates(directory="app/templates")
 
 
@@ -23,6 +24,16 @@ def home(request: Request):
         context={
             "title": "PermissionFlow"
         }
+    )
+
+
+# 👇 ADICIONA AQUI
+@app.get("/request", response_class=HTMLResponse)
+def request_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="request.html",
+        context={}
     )
 
 
