@@ -9,51 +9,53 @@
 
 <h1>Request Access</h1>
 
-<form>
+<form action="/request" method="post">
 
-<label>Application</label>
+    <label>Application</label>
 
-<br>
+    <br>
 
-<select>
+    <select name="application">
 
-<option>GitHub Enterprise</option>
+        {% for application in applications %}
 
-<option>Jira</option>
+        <option value="{{ application.id }}">
+            {{ application.name }}
+        </option>
 
-<option>SAP</option>
+        {% endfor %}
 
-</select>
+    </select>
 
-<br><br>
+    <br><br>
 
-<label>Access Profile</label>
+    <label>Access Profile</label>
 
-<br>
+    <br>
 
-<input type="text">
+    <input type="text" name="access_profile">
 
-<br><br>
+    <br><br>
 
-<label>Justification</label>
+    <label>Justification</label>
 
-<br>
+    <br>
 
-<textarea rows="5" cols="40"></textarea>
+    <textarea name="justification" rows="5" cols="40"></textarea>
 
-<br><br>
+    <br><br>
 
-<label>Desired Date</label>
+    <label>Desired Date</label>
 
-<br>
+    <br>
 
-<input type="date">
+    <input type="date" name="desired_date">
 
-<br><br>
+    <br><br>
 
-<button type="submit">
-Submit Request
-</button>
+    <button type="submit">
+        Submit Request
+    </button>
 
 </form>
 
