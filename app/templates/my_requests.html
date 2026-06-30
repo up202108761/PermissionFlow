@@ -2,68 +2,92 @@
 
 {% block content %}
 
-<h1>My Requests</h1>
+<h1 class="mb-4">📄 My Requests</h1>
 
-<table class="table table-striped">
+{% if requests %}
 
-<thead>
+<table class="table table-striped table-hover align-middle">
 
-<tr>
+    <thead class="table-dark">
 
-<th>Application</th>
+        <tr>
+            <th>Application</th>
+            <th>Status</th>
+            <th>Profile</th>
+            <th>Desired Date</th>
+            <th>Owner Comment</th>
+        </tr>
 
-<th>Status</th>
+    </thead>
 
-<th>Profile</th>
+    <tbody>
 
-<th>Date</th>
+        {% for request in requests %}
 
-<th>Comment</th>
+        <tr>
 
-</tr>
+            <td>{{ request.application.name }}</td>
 
-</thead>
+            <td>
 
-<tbody>
+                {% if request.status == "Pending" %}
 
-{% for request in requests %}
+                <span class="badge bg-warning text-dark">
+                    Pending
+                </span>
 
-<tr>
+                {% elif request.status == "Approved" %}
 
-<td>{{ request.application.name }}</td>
+                <span class="badge bg-success">
+                    Approved
+                </span>
 
-<td>{% if request.status == "Pending" %}
+                {% else %}
 
-<span class="badge bg-warning">
-Pending
-</span>
+                <span class="badge bg-danger">
+                    Rejected
+                </span>
 
-{% elif request.status == "Approved" %}
+                {% endif %}
 
-<span class="badge bg-success">
-Approved
-</span>
+            </td>
+
+            <td>{{ request.access_profile }}</td>
+
+            <td>{{ request.desired_date }}</td>
+
+            <td>
+
+                {% if request.owner_comment %}
+
+                    {{ request.owner_comment }}
+
+                {% else %}
+
+                    <span class="text-muted">
+                        No comment
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
 
 {% else %}
 
-<span class="badge bg-danger">
-Rejected
-</span>
+<div class="alert alert-info">
 
-{% endif %}</td>
+You have not submitted any requests yet.
 
-<td>{{ request.access_profile }}</td>
+</div>
 
-<td>{{ request.desired_date }}</td>
-
-<td>{{ request.owner_comment }}</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
+{% endif %}
 
 {% endblock %}

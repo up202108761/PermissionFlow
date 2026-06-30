@@ -2,79 +2,92 @@
 
 {% block content %}
 
-<h1>Owner Dashboard</h1>
+<h1 class="mb-4">👨‍💼 Owner Dashboard</h1>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-hover align-middle">
 
-<thead>
+    <thead class="table-dark">
 
-<tr>
+        <tr>
+            <th>Employee</th>
+            <th>Application</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
 
-<th>Employee</th>
+    </thead>
 
-<th>Application</th>
+    <tbody>
 
-<th>Status</th>
+        {% for request in requests %}
 
-<th>Action</th>
+        <tr>
 
-</tr>
+            <td>{{ request.user.name }}</td>
 
-</thead>
+            <td>{{ request.application.name }}</td>
 
-<tbody>
+            <td>
 
-{% for request in requests %}
+                {% if request.status == "Pending" %}
 
-<tr>
+                <span class="badge bg-warning text-dark">
+                    Pending
+                </span>
 
-<td>{{ request.user.name }}</td>
+                {% elif request.status == "Approved" %}
 
-<td>{{ request.application.name }}</td>
+                <span class="badge bg-success">
+                    Approved
+                </span>
 
-<td>{{ request.status }}</td>
+                {% else %}
 
-<td>
+                <span class="badge bg-danger">
+                    Rejected
+                </span>
 
-<form action="/approve/{{ request.id }}" method="post">
+                {% endif %}
 
-<input
-class="form-control mb-2"
-name="comment"
-placeholder="Comment">
+            </td>
 
-<button class="btn btn-success btn-sm">
+            <td>
 
-Approve
+                <form action="/approve/{{ request.id }}" method="post">
 
-</button>
+                    <input
+                        class="form-control mb-2"
+                        name="comment"
+                        placeholder="Approval comment">
 
-</form>
+                    <button class="btn btn-success btn-sm w-100">
+                        ✅ Approve
+                    </button>
 
-<br>
+                </form>
 
-<form action="/reject/{{ request.id }}" method="post">
+                <br>
 
-<input
-class="form-control mb-2"
-name="comment"
-placeholder="Comment">
+                <form action="/reject/{{ request.id }}" method="post">
 
-<button class="btn btn-danger btn-sm">
+                    <input
+                        class="form-control mb-2"
+                        name="comment"
+                        placeholder="Rejection comment">
 
-Reject
+                    <button class="btn btn-danger btn-sm w-100">
+                        ❌ Reject
+                    </button>
 
-</button>
+                </form>
 
-</form>
+            </td>
 
-</td>
+        </tr>
 
-</tr>
+        {% endfor %}
 
-{% endfor %}
-
-</tbody>
+    </tbody>
 
 </table>
 

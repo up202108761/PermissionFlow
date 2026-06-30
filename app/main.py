@@ -1,15 +1,21 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from app.database import Base, engine, SessionLocal
-from app.models import User, Application, AccessRequest
 from sqlalchemy.orm import joinedload
 
+from app.database import Base, SessionLocal, engine
+from app.models import Application, AccessRequest
 
-# Cria automaticamente as tabelas
+# -----------------------
+# Database
+# -----------------------
+
 Base.metadata.create_all(bind=engine)
+
+# -----------------------
+# FastAPI
+# -----------------------
 
 app = FastAPI(
     title="PermissionFlow",
@@ -18,6 +24,9 @@ app = FastAPI(
 
 templates = Jinja2Templates(directory="app/templates")
 
+# -----------------------
+# Home Page
+# -----------------------
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
@@ -43,6 +52,9 @@ def home(request: Request):
         }
     )
 
+# -----------------------
+# Request Access
+# -----------------------
 
 @app.get("/request", response_class=HTMLResponse)
 def request_page(request: Request):
@@ -61,6 +73,7 @@ def request_page(request: Request):
         }
     )
 
+
 @app.post("/request")
 def submit_request(
     application: int = Form(...),
@@ -72,7 +85,7 @@ def submit_request(
     db = SessionLocal()
 
     new_request = AccessRequest(
-        user_id=2,                 # Gonçalo
+        user_id=2,  # Temporary employee (authentication not implemented)
         application_id=application,
         access_profile=access_profile,
         justification=justification,
@@ -86,43 +99,9 @@ def submit_request(
 
     return RedirectResponse("/?success=1", status_code=303)
 
-
-@app.get("/users")
-def list_users():
-    db = SessionLocal()
-
-    users = db.query(User).all()
-
-    result = []
-
-    for user in users:
-        result.append({
-            "id": user.id,
-            "name": user.name,
-            "email": user.email,
-            "role": user.role
-        })
-
-@app.get("/requests")
-def list_requests():
-    db = SessionLocal()
-
-    requests = db.query(AccessRequest).all()
-
-    result = []
-
-    for request in requests:
-        result.append({
-            "id": request.id,
-            "user_id": request.user_id,
-            "application_id": request.application_id,
-            "access_profile": request.access_profile,
-            "justification": request.justification,
-            "desired_date": request.desired_date,
-            "status": request.status,
-            "owner_comment": request.owner_comment
-        })
-
+# -----------------------
+# My Requests
+# -----------------------
 
 @app.get("/my_requests", response_class=HTMLResponse)
 def my_requests(request: Request):
@@ -130,14 +109,14 @@ def my_requests(request: Request):
     db = SessionLocal()
 
     requests = (
-    db.query(AccessRequest)
-    .options(
-        joinedload(AccessRequest.application)
-        .joinedload(Application.owner)
+        db.query(AccessRequest)
+        .options(
+            joinedload(AccessRequest.application)
+            .joinedload(Application.owner)
+        )
+        .filter(AccessRequest.user_id == 2)
+        .all()
     )
-    .filter(AccessRequest.user_id == 2)
-    .all()
-)
 
     db.close()
 
@@ -148,6 +127,10 @@ def my_requests(request: Request):
             "requests": requests
         }
     )
+
+# -----------------------
+# Owner Dashboard
+# -----------------------
 
 @app.get("/owner", response_class=HTMLResponse)
 def owner_dashboard(request: Request):
@@ -161,7 +144,6 @@ def owner_dashboard(request: Request):
             joinedload(AccessRequest.application)
         )
         .filter(AccessRequest.status == "Pending")
-        .filter(AccessRequest.status == "Pending")
         .all()
     )
 
@@ -174,6 +156,10 @@ def owner_dashboard(request: Request):
             "requests": requests
         }
     )
+
+# -----------------------
+# Approve Request
+# -----------------------
 
 @app.post("/approve/{request_id}")
 def approve_request(
@@ -189,13 +175,18 @@ def approve_request(
         .first()
     )
 
-    access_request.status = "Approved"
-    access_request.owner_comment = comment
+    if access_request:
+        access_request.status = "Approved"
+        access_request.owner_comment = comment
+        db.commit()
 
-    db.commit()
     db.close()
 
     return RedirectResponse("/owner", status_code=303)
+
+# -----------------------
+# Reject Request
+# -----------------------
 
 @app.post("/reject/{request_id}")
 def reject_request(
@@ -211,14 +202,11 @@ def reject_request(
         .first()
     )
 
-    access_request.status = "Rejected"
-    access_request.owner_comment = comment
+    if access_request:
+        access_request.status = "Rejected"
+        access_request.owner_comment = comment
+        db.commit()
 
-    db.commit()
     db.close()
 
     return RedirectResponse("/owner", status_code=303)
-
-    db.close()
-
-    return result

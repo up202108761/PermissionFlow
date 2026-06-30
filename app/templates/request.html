@@ -2,67 +2,78 @@
 
 {% block content %}
 
-<h1>Request Access</h1>
+<h1 class="mb-4">📝 Request Access</h1>
 
 <form action="/request" method="post">
 
-<div class="mb-3">
+    <div class="mb-3">
 
-<label class="form-label">Application</label>
+        <label class="form-label">
+            Application
+        </label>
 
-<select class="form-select" name="application">
+        <select class="form-select" name="application">
 
-{% for application in applications %}
+            {% for application in applications %}
 
-<option value="{{ application.id }}">
-{{ application.name }}
-</option>
+            <option value="{{ application.id }}">
+                {{ application.name }}
+            </option>
 
-{% endfor %}
+            {% endfor %}
 
-</select>
+        </select>
 
-</div>
+    </div>
 
-<div class="mb-3">
+    <div class="mb-3">
 
-<label class="form-label">Access Profile</label>
+        <label class="form-label">
+            Access Profile
+        </label>
 
-<select class="form-select" name="access_profile">
+        <select class="form-select" name="access_profile">
 
-<option>Viewer</option>
-<option>Developer</option>
-<option>Administrator</option>
+            <option>Viewer</option>
+            <option>Developer</option>
+            <option>Administrator</option>
 
-</select>
+        </select>
 
-</div>
+    </div>
 
-<div class="mb-3">
+    <div class="mb-3">
 
-<label class="form-label">Justification</label>
+        <label class="form-label">
+            Justification
+        </label>
 
-<textarea class="form-control"
-name="justification"></textarea>
+        <textarea
+            class="form-control"
+            rows="4"
+            name="justification"
+            placeholder="Explain why you need access..."
+            required></textarea>
 
-</div>
+    </div>
 
-<div class="mb-3">
+    <div class="mb-4">
 
-<label class="form-label">Desired Date</label>
+        <label class="form-label">
+            Desired Date
+        </label>
 
-<input
-class="form-control"
-type="date"
-name="desired_date">
+        <input
+            class="form-control"
+            type="date"
+            name="desired_date"
+            required>
 
-</div>
+    </div>
 
-<button class="btn btn-primary">
-
-Submit Request
-
-</button>
+    <button class="btn btn-primary btn-lg">
+        Submit Request
+    </button>
 
 </form>
 

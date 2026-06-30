@@ -9,40 +9,56 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="bg-light">
 
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">PermissionFlow</a>
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
 
-        <div>
-            <a class="btn btn-outline-light btn-sm" href="/request">Request Access</a>
-            <a class="btn btn-outline-light btn-sm" href="/my_requests">My Requests</a>
-            <a class="btn btn-outline-light btn-sm" href="/owner">Owner Dashboard</a>
+            <a class="navbar-brand fw-bold fs-4" href="/">
+                🔐 PermissionFlow
+            </a>
+
+            <div>
+                <a class="btn btn-outline-light btn-sm me-2" href="/request">
+                    📝 Request
+                </a>
+
+                <a class="btn btn-outline-light btn-sm me-2" href="/my_requests">
+                    📄 My Requests
+                </a>
+
+                <a class="btn btn-outline-light btn-sm" href="/owner">
+                    👨‍💼 Owner
+                </a>
+            </div>
+
         </div>
+    </nav>
+
+    <div class="container py-5">
+
+        {% block content %}
+        {% endblock %}
+
+        <hr class="mt-5">
+
+        <footer class="text-center text-muted mb-3">
+
+            <p class="mb-1">
+                <strong>PermissionFlow © 2026</strong>
+            </p>
+
+            <p class="mb-0">
+                Developed by
+                <strong>Gonçalo Matos</strong>,
+                <strong>Alexandra Torres</strong> &
+                <strong>João Chaves</strong>
+            </p>
+
+        </footer>
+
     </div>
-</nav>
-
-<div class="container mt-4">
-
-{% block content %}
-{% endblock %}
-
-</div>
 
 </body>
-<hr>
-
-<div class="text-center text-muted mb-3">
-
-PermissionFlow © 2026 |
-
-Developed by:
-
-Gonçalo Matos,
-Alexandra Torres,
-João Chaves
-
-</div>
 
 </html>

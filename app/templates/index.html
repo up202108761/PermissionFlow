@@ -2,55 +2,80 @@
 
 {% block content %}
 
-<h1>PermissionFlow</h1>
+<h1 class="text-center display-4 mb-3">
+    🔐 PermissionFlow
+</h1>
 
-<p class="lead">
-Internal Access Management System
+<p class="text-center text-muted fs-5">
+    Internal Application Access Management System
 </p>
 
-<hr>
+<p class="text-center text-secondary mb-5">
+    PermissionFlow allows employees to request access to company applications while enabling application owners to review, approve or reject those requests.
+</p>
 
 {% if success %}
 
-<div class="alert alert-success">
+<div class="alert alert-success text-center">
 
-Request submitted successfully!
+    ✅ Request submitted successfully!
 
 </div>
 
 {% endif %}
 
-<h3>Available Applications</h3>
+<div class="text-center mb-5">
+
+    <a href="/request" class="btn btn-primary btn-lg me-2">
+        📝 Request Access
+    </a>
+
+    <a href="/my_requests" class="btn btn-success btn-lg me-2">
+        📄 My Requests
+    </a>
+
+    <a href="/owner" class="btn btn-warning btn-lg">
+        👨‍💼 Owner Dashboard
+    </a>
+
+</div>
+
+<h2 class="mb-4">
+    Available Applications
+</h2>
 
 <div class="row">
 
-{% for application in applications %}
+    {% for application in applications %}
 
-<div class="col-md-4 mb-3">
+    <div class="col-md-4 mb-4">
 
-<div class="card shadow-sm h-100">
-    
-<div class="card-body">
+        <div class="card shadow-sm h-100">
 
-<h5>{{ application.name }}</h5>
+            <div class="card-body">
 
-<p>{{ application.description }}</p>
+                <h4 class="card-title">
+                    💻 {{ application.name }}
+                </h4>
 
-<p>
+                <hr>
 
-<b>Owner:</b>
+                <p class="card-text">
+                    {{ application.description }}
+                </p>
 
-{{ application.owner.name }}
+                <p class="text-muted mb-0">
+                    👤 <strong>Owner:</strong>
+                    {{ application.owner.name }}
+                </p>
 
-</p>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-</div>
-
-{% endfor %}
+    {% endfor %}
 
 </div>
 
