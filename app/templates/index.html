@@ -10,6 +10,16 @@ Internal Access Management System
 
 <hr>
 
+{% if success %}
+
+<div class="alert alert-success">
+
+Request submitted successfully!
+
+</div>
+
+{% endif %}
+
 <h3>Available Applications</h3>
 
 <div class="row">
@@ -18,8 +28,8 @@ Internal Access Management System
 
 <div class="col-md-4 mb-3">
 
-<div class="card">
-
+<div class="card shadow-sm h-100">
+    
 <div class="card-body">
 
 <h5>{{ application.name }}</h5>

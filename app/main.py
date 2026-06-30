@@ -22,6 +22,8 @@ templates = Jinja2Templates(directory="app/templates")
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
 
+    success = request.query_params.get("success")
+
     db = SessionLocal()
 
     applications = (
@@ -36,7 +38,8 @@ def home(request: Request):
         request=request,
         name="index.html",
         context={
-            "applications": applications
+            "applications": applications,
+            "success": success
         }
     )
 
@@ -81,7 +84,7 @@ def submit_request(
 
     db.close()
 
-    return RedirectResponse("/", status_code=303)
+    return RedirectResponse("/?success=1", status_code=303)
 
 
 @app.get("/users")
@@ -157,6 +160,7 @@ def owner_dashboard(request: Request):
             joinedload(AccessRequest.user),
             joinedload(AccessRequest.application)
         )
+        .filter(AccessRequest.status == "Pending")
         .filter(AccessRequest.status == "Pending")
         .all()
     )

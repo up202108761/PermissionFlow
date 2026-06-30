@@ -32,7 +32,25 @@
 
 <td>{{ request.application.name }}</td>
 
-<td>{{ request.status }}</td>
+<td>{% if request.status == "Pending" %}
+
+<span class="badge bg-warning">
+Pending
+</span>
+
+{% elif request.status == "Approved" %}
+
+<span class="badge bg-success">
+Approved
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+Rejected
+</span>
+
+{% endif %}</td>
 
 <td>{{ request.access_profile }}</td>
 
