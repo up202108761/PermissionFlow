@@ -1,5 +1,8 @@
-from app.database import SessionLocal
+from app.database import Base, SessionLocal, engine
 from app.models import User, Application
+
+# Criar as tabelas
+Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
 
