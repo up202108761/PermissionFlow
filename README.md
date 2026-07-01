@@ -160,6 +160,8 @@ From the home page you can:
 - View your requests
 - Open the owner dashboard
 
+![alt text](image-1.png)
+
 ---
 
 ## Request Access
@@ -176,6 +178,8 @@ The request will be stored in the database with the status:
 ```
 Pending
 ```
+
+![alt text](image-2.png)
 
 ---
 
@@ -198,6 +202,8 @@ Possible request statuses:
 - Approved
 - Rejected
 
+![alt text](image-3.png)
+
 ---
 
 ## Owner Dashboard
@@ -216,6 +222,8 @@ After approval or rejection:
 
 - The request disappears from the pending list.
 - The employee can see the updated status and the owner's comment in **My Requests**.
+
+![alt text](image-4.png)
 
 ---
 
